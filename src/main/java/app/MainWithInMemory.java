@@ -6,7 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import data_access.InMemoryUserDataAccessObject;
+import data_access.DBUserDataAccessObject;
+import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
@@ -19,7 +20,7 @@ import view.ViewManager;
 /**
  * The version of Main with an external database used to persist user data.
  */
-public class MainWithDB {
+public class MainWithInMemory {
 
     /**
      * The main method for starting the program with an external database used to persist user data.
@@ -52,18 +53,18 @@ public class MainWithDB {
         final SignupViewModel signupViewModel = new SignupViewModel();
 
         // TODO Task 1.1 in a copy of this file, change this line to use the in-memory DAO.
-        final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
+        final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
 
         final SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel,
-                                                                  signupViewModel, userDataAccessObject);
+                signupViewModel, userDataAccessObject);
         views.add(signupView, signupView.getViewName());
 
         final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,
-                                                               loggedInViewModel, userDataAccessObject);
+                loggedInViewModel, userDataAccessObject);
         views.add(loginView, loginView.getViewName());
 
         final LoggedInView loggedInView = ChangePasswordUseCaseFactory.create(viewManagerModel,
-                                                                              loggedInViewModel, userDataAccessObject);
+                loggedInViewModel, userDataAccessObject);
         views.add(loggedInView, loggedInView.getViewName());
 
         viewManagerModel.setState(signupView.getViewName());
